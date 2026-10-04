@@ -3,7 +3,7 @@ resource "docker_volume" "minio_data" {
 }
 
 resource "docker_image" "minio" {
-  name = "quay.io/minio/minio:latest"
+  name = "quay.io/minio/aistor/minio:RELEASE.2026-09-19T17-05-25Z"
 }
 
 resource "docker_container" "minio" {
