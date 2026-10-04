@@ -15,3 +15,9 @@ variable "postgres_password" {
   type        = string
   sensitive   = true
 }
+
+variable "minio_password" {
+  description = "MinIO root password"
+  type        = string
+  sensitive   = true
+}
