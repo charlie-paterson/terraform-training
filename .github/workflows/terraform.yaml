@@ -8,13 +8,17 @@ on:
     branches:
       - main
 
+concurrency:
+  group: terraform-local-cloud
+  cancel-in-progress: false
+
 jobs:
   terraform:
     runs-on: self-hosted
 
     defaults:
       run:
-        working-directory: local-cloud
+        working-directory: local-cloud/infrastructure
 
     steps:
       - name: Checkout
