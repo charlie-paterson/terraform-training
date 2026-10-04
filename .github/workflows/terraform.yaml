@@ -33,3 +33,9 @@ jobs:
         env:
           TF_VAR_postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
         run: terraform plan
+
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          TF_VAR_postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+        run: terraform apply -auto-approve
