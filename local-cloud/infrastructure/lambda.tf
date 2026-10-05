@@ -47,7 +47,7 @@ resource "aws_lambda_function" "worker" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE   = aws_dynamodb_table.training.name
+      DYNAMODB_TABLE = module.database.table_name
       AWS_ENDPOINT_URL = "http://172.17.0.2:4566"
       AWS_REGION       = "us-east-1"
     }
