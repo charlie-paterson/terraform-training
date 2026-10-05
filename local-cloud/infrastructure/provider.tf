@@ -16,7 +16,7 @@ provider "aws" {
     sns        = "http://localhost:4566"
     sqs        = "http://localhost:4566"
     lambda     = "http://localhost:4566"
-    apigateway = "http://localhost:4566"
+    apigatewayv2 = "http://localhost:4566"
   }
 
   s3_use_path_style = true
