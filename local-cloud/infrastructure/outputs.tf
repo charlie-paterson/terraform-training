@@ -1,3 +1,8 @@
+output "dynamodb_table_name" {
+  description = "DynamoDB table name"
+  value       = module.database.table_name
+}
+
 output "sqs_queue_url" {
   description = "SQS queue URL"
   value       = module.messaging.sqs_queue_url
