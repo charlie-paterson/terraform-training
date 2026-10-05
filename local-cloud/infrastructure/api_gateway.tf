@@ -1,9 +1,5 @@
 resource "aws_api_gateway_rest_api" "training" {
   name = "terraform-training-api"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
 }
 
 resource "aws_api_gateway_resource" "events" {
