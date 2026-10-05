@@ -64,3 +64,25 @@ resource "aws_lambda_event_source_mapping" "worker_sqs" {
 
   batch_size = 1
 }
+
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowApiGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.publish.function_name
+  principal     = "apigateway.amazonaws.com"
+}
+
+resource "aws_api_gateway_integration" "events_post" {
+  rest_api_id = aws_api_gateway_rest_api.training.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_post.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+
+  uri = aws_lambda_function.publish.invoke_arn
+
+  depends_on = [
+    aws_lambda_permission.api_gateway
+  ]
+}
