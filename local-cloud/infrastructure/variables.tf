@@ -33,3 +33,8 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "dynamodb_table_name" {
+  description = "DynamoDB table name"
+  type        = string
+}

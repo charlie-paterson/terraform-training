@@ -37,6 +37,14 @@ module "networking" {
   subnet_cidr  = var.subnet_cidr
 }
 
+module "database" {
+  source = "./modules/database"
+
+  project_name = var.project_name
+  environment  = var.environment
+  table_name   = var.dynamodb_table_name
+}
+
 moved {
   from = aws_vpc.training
   to   = module.networking.aws_vpc.training
@@ -50,4 +58,9 @@ moved {
 moved {
   from = aws_security_group.training
   to   = module.networking.aws_security_group.training
+}
+
+moved {
+  from = aws_dynamodb_table.training
+  to   = module.database.aws_dynamodb_table.training
 }
