@@ -1,53 +1,31 @@
-resource "aws_api_gateway_rest_api" "training" {
-  name = "terraform-training-api"
+resource "aws_apigatewayv2_api" "training" {
+  name          = "terraform-training-api"
+  protocol_type = "HTTP"
 }
 
-resource "aws_api_gateway_resource" "events" {
-  rest_api_id = aws_api_gateway_rest_api.training.id
-  parent_id   = aws_api_gateway_rest_api.training.root_resource_id
-  path_part   = "events"
+resource "aws_apigatewayv2_integration" "publish" {
+  api_id = aws_apigatewayv2_api.training.id
+
+  integration_type = "AWS_PROXY"
+  integration_uri  = aws_lambda_function.publish.invoke_arn
+
+  integration_method = "POST"
 }
 
-resource "aws_api_gateway_method" "events_post" {
-  rest_api_id   = aws_api_gateway_rest_api.training.id
-  resource_id   = aws_api_gateway_resource.events.id
-  http_method   = "POST"
-  authorization = "NONE"
+resource "aws_apigatewayv2_route" "events" {
+  api_id    = aws_apigatewayv2_api.training.id
+  route_key = "POST /events"
+
+  target = "integrations/${aws_apigatewayv2_integration.publish.id}"
 }
 
-resource "aws_api_gateway_integration" "events_post" {
-  rest_api_id = aws_api_gateway_rest_api.training.id
-  resource_id = aws_api_gateway_resource.events.id
-  http_method = aws_api_gateway_method.events_post.http_method
+resource "aws_apigatewayv2_stage" "dev" {
+  api_id = aws_apigatewayv2_api.training.id
+  name   = "dev"
 
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-
-  uri = aws_lambda_function.publish.invoke_arn
-
-  depends_on = [
-    aws_lambda_permission.api_gateway
-  ]
-}
-
-resource "aws_api_gateway_deployment" "training" {
-  rest_api_id = aws_api_gateway_rest_api.training.id
-
-  depends_on = [
-    aws_api_gateway_integration.events_post
-  ]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_api_gateway_stage" "training" {
-  rest_api_id   = aws_api_gateway_rest_api.training.id
-  deployment_id = aws_api_gateway_deployment.training.id
-  stage_name    = "dev"
+  auto_deploy = true
 }
 
 output "api_gateway_url" {
-  value = "http://localhost:4566/restapis/${aws_api_gateway_rest_api.training.id}/dev/_user_request_/events"
+  value = "${aws_apigatewayv2_api.training.api_endpoint}/events"
 }
