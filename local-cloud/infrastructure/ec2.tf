@@ -41,6 +41,8 @@ resource "aws_instance" "training" {
 
   subnet_id              = aws_subnet.training.id
   vpc_security_group_ids = [aws_security_group.training.id]
+  
+  iam_instance_profile = aws_iam_instance_profile.ec2_ssm.name
 
   tags = {
     Name = "terraform-training-ec2"
