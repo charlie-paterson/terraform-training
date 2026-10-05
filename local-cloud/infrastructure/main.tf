@@ -64,6 +64,26 @@ module "messaging" {
   queue_name = var.sqs_queue_name
 }
 
+module "compute" {
+  source = "./modules/compute"
+
+  project_name         = var.project_name
+  instance_type        = var.instance_type
+  subnet_id            = module.networking.subnet_id
+  security_group_id    = module.networking.security_group_id
+  iam_instance_profile = module.iam.ec2_ssm_instance_profile_name
+}
+
+module "iam" {
+  source = "./modules/iam"
+
+  project_name  = var.project_name
+  sns_topic_arn = module.messaging.sns_topic_arn
+
+  ec2_ssm_role_name             = "terraform-training-ec2-ssm-role"
+  ec2_ssm_instance_profile_name = "terraform-training-ec2-ssm-profile"
+}
+
 moved {
   from = aws_vpc.training
   to   = module.networking.aws_vpc.training
@@ -117,4 +137,9 @@ moved {
 moved {
   from = aws_lambda_event_source_mapping.worker_sqs
   to   = module.lambda.aws_lambda_event_source_mapping.worker_sqs
+}
+
+moved {
+  from = aws_instance.training
+  to   = module.compute.aws_instance.training
 }
