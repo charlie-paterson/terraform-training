@@ -18,7 +18,7 @@ resource "aws_lambda_function" "publish" {
   environment {
     variables = {
       SNS_TOPIC_ARN    = aws_sns_topic.training.arn
-      AWS_ENDPOINT_URL = "http://localhost:4566"
+      AWS_ENDPOINT_URL = "http://172.17.0.2:4566"
       AWS_REGION       = "us-east-1"
     }
   }
