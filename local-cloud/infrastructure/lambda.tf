@@ -17,7 +17,7 @@ resource "aws_lambda_function" "publish" {
 
   environment {
     variables = {
-      SNS_TOPIC_ARN    = aws_sns_topic.training.arn
+      SNS_TOPIC_ARN    = module.messaging.sns_topic_arn
       AWS_ENDPOINT_URL = "http://172.17.0.2:4566"
       AWS_REGION       = "us-east-1"
     }
@@ -47,7 +47,7 @@ resource "aws_lambda_function" "worker" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE = module.database.table_name
+      DYNAMODB_TABLE   = module.database.table_name
       AWS_ENDPOINT_URL = "http://172.17.0.2:4566"
       AWS_REGION       = "us-east-1"
     }
@@ -59,7 +59,7 @@ resource "aws_lambda_function" "worker" {
 }
 
 resource "aws_lambda_event_source_mapping" "worker_sqs" {
-  event_source_arn = aws_sqs_queue.training.arn
+  event_source_arn = module.messaging.sqs_queue_arn
   function_name    = aws_lambda_function.worker.arn
 
   batch_size = 1

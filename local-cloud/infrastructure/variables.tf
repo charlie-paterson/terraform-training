@@ -38,3 +38,13 @@ variable "dynamodb_table_name" {
   description = "DynamoDB table name"
   type        = string
 }
+
+variable "sns_topic_name" {
+  description = "SNS topic name"
+  type        = string
+}
+
+variable "sqs_queue_name" {
+  description = "SQS queue name"
+  type        = string
+}

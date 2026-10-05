@@ -30,7 +30,7 @@ resource "aws_iam_role_policy" "lambda" {
         "sns:Publish"
       ]
 
-      Resource = aws_sns_topic.training.arn
+      Resource = module.messaging.sns_topic_arn
     }]
   })
 }

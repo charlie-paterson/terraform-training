@@ -1,7 +1,9 @@
 output "sqs_queue_url" {
-  value = aws_sqs_queue.training.url
+  description = "SQS queue URL"
+  value       = module.messaging.sqs_queue_url
 }
 
 output "sns_topic_arn" {
-  value = aws_sns_topic.training.arn
+  description = "SNS topic ARN"
+  value       = module.messaging.sns_topic_arn
 }
