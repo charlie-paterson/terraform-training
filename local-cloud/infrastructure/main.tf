@@ -45,6 +45,18 @@ module "database" {
   table_name   = var.dynamodb_table_name
 }
 
+module "lambda" {
+  source = "./modules/lambda"
+
+  project_name        = var.project_name
+  sns_topic_arn       = module.messaging.sns_topic_arn
+  dynamodb_table_name = module.database.table_name
+  sqs_queue_arn       = module.messaging.sqs_queue_arn
+  aws_endpoint_url    = "http://172.17.0.2:4566"
+  aws_region          = var.aws_region
+  lambda_role_arn     = aws_iam_role.lambda.arn
+}
+
 module "messaging" {
   source = "./modules/messaging"
 
@@ -90,4 +102,19 @@ moved {
 moved {
   from = aws_sqs_queue_policy.training
   to   = module.messaging.aws_sqs_queue_policy.training
+}
+
+moved {
+  from = aws_lambda_function.publish
+  to   = module.lambda.aws_lambda_function.publish
+}
+
+moved {
+  from = aws_lambda_function.worker
+  to   = module.lambda.aws_lambda_function.worker
+}
+
+moved {
+  from = aws_lambda_event_source_mapping.worker_sqs
+  to   = module.lambda.aws_lambda_event_source_mapping.worker_sqs
 }
