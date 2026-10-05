@@ -28,6 +28,10 @@ resource "aws_api_gateway_integration" "events_post" {
   type                    = "AWS_PROXY"
 
   uri = aws_lambda_function.publish.invoke_arn
+
+  depends_on = [
+    aws_lambda_permission.api_gateway
+  ]
 }
 
 resource "aws_api_gateway_deployment" "training" {
