@@ -84,6 +84,13 @@ module "iam" {
   ec2_ssm_instance_profile_name = "terraform-training-ec2-ssm-profile"
 }
 
+module "api" {
+  source = "./modules/api"
+
+  api_name          = "terraform-training-api"
+  lambda_invoke_arn = module.lambda.publish_invoke_arn
+}
+
 moved {
   from = aws_vpc.training
   to   = module.networking.aws_vpc.training
@@ -142,4 +149,24 @@ moved {
 moved {
   from = aws_instance.training
   to   = module.compute.aws_instance.training
+}
+
+moved {
+  from = aws_apigatewayv2_api.training
+  to   = module.api.aws_apigatewayv2_api.training
+}
+
+moved {
+  from = aws_apigatewayv2_integration.publish
+  to   = module.api.aws_apigatewayv2_integration.publish
+}
+
+moved {
+  from = aws_apigatewayv2_route.events
+  to   = module.api.aws_apigatewayv2_route.events
+}
+
+moved {
+  from = aws_apigatewayv2_stage.dev
+  to   = module.api.aws_apigatewayv2_stage.dev
 }

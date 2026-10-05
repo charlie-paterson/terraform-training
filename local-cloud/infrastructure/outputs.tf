@@ -12,3 +12,8 @@ output "sns_topic_arn" {
   description = "SNS topic ARN"
   value       = module.messaging.sns_topic_arn
 }
+
+output "api_gateway_url" {
+  description = "API Gateway events endpoint"
+  value       = module.api.api_url
+}
