@@ -22,3 +22,15 @@ output "postgres_connection_string" {
   description = "PostgreSQL connection string"
   value       = "postgresql://${var.postgres_user}:<password>@localhost:5432/${var.postgres_database}"
 }
+
+output "dynamodb_table_name" {
+  value = aws_dynamodb_table.training.name
+}
+
+output "sqs_queue_url" {
+  value = aws_sqs_queue.training.url
+}
+
+output "sns_topic_arn" {
+  value = aws_sns_topic.training.arn
+}
