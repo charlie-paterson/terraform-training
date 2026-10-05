@@ -12,10 +12,17 @@ terraform {
     aws = {
       source = "hashicorp/aws"
     }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.4"
+    }
   }
 }
 
 provider "docker" {}
+
+provider "archive" {}
 
 resource "docker_network" "local_cloud" {
   name = "local-cloud"
