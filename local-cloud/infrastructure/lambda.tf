@@ -67,7 +67,6 @@ resource "aws_lambda_event_source_mapping" "worker_sqs" {
 
 resource "aws_lambda_permission" "api_gateway" {
   statement_id  = "AllowHttpApiInvoke"
-
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.publish.function_name
   principal     = "apigateway.amazonaws.com"
